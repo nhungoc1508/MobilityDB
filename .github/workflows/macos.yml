@@ -57,6 +57,14 @@ jobs:
         run: |
           brew reinstall cmake
 
+      - name: Set up Homebrew tap for old PostGIS (3.6.0, PG14)
+        if: matrix.os == 'macos-14'
+        run: |
+          brew uninstall -f postgis || true
+          brew tap-new local/old-postgis
+          brew extract --version=3.6.0 postgis local/old-postgis --git-revision=72870a6b97ee267621c52951fdef4ec95947505f
+          brew install local/old-postgis/postgis@3.6.0
+
       - name: Configure
         run: |
           mkdir build
