@@ -60,9 +60,11 @@ jobs:
       - name: Set up Homebrew tap for old PostGIS (3.6.0, PG14)
         if: matrix.os == 'macos-14'
         run: |
-          brew uninstall -f postgis || true
+          brew uninstall --ignore-dependencies postgis@3.6.0 || true
           brew tap-new local/old-postgis
           brew extract --version=3.6.0 postgis local/old-postgis --git-revision=72870a6b97ee267621c52951fdef4ec95947505f
+          export PATH="/opt/homebrew/opt/postgresql@14/bin:$PATH"
+          export PG_CONFIG="/opt/homebrew/opt/postgresql@14/bin/pg_config"
           brew install local/old-postgis/postgis@3.6.0
 
       - name: Configure
